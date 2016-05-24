@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title> Morpion</title>
+
+	<style type="text/css">
+
+				/* Débit CSS */
+#tableau{
+	margin: auto;
+	border-collapse: collapse;
+}
+
+td{
+	width: 150px;
+	height: 150px;
+	background-image: url('image-morpion/croix-rond.png');
+
+}
+
+#block_1{
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+
+}
+
+#block_2{
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+#block_3{
+	border-bottom: 2px solid black;
+}
+#block_4{
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+#block_5{
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+#block_6{
+	border-bottom: 2px solid black;
+}
+
+#block_7{
+	border-right: 2px solid black;
+
+}
+
+#block_8{
+	border-right: 2px solid black;
+
+}
+
+h1{
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	text-decoration: underline;
+
+}
+						/* FIN CSS */
+	</style>
+</head>
+<body onload="initialise();">
+
+							<!--   TABLEAU content    -->
+		<h1 id="titre">MORPION</h1>
+
+	<table id="tableau">
+		<tr>
+			<td id="block_1" onclick="choixjoueur('block_1')"></td>
+			<td id="block_2" onclick="choixjoueur('block_2')"></td>
+			<td id="block_3" onclick="choixjoueur('block_3')"></td>
+		</tr>
+		<tr>
+			<td id="block_4" onclick="choixjoueur('block_4')"></td>
+			<td id="block_5" onclick="choixjoueur('block_5')"></td>
+			<td id="block_6" onclick="choixjoueur('block_6')"></td>
+		</tr>
+		<tr>	
+			<td id="block_7" onclick="choixjoueur('block_7')"></td>
+			<td id="block_8" onclick="choixjoueur('block_8')"></td>
+			<td id="block_9" onclick="choixjoueur('block_9')"></td>
+		</tr>
+
+	</table>
+
+		<button id="bouton" onclick="initialise()">REJOUER!</button>
+
+
+							<!--    JAVASCRIPT     -->
+		<script type="text/javascript">
+	
+	function initialise(){
+		document.getElementById('bouton').style.display= 'none';
+		coupJouer= ['rien', 'rien', 'rien', 'rien', 'rien', 'rien', 'rien', 'rien', 'rien'];
+		nombreCoup= 1;
+		for (var i = 0; i < 9; i++) {
+		
+		document.getElementsByTagName('td')[i].style.backgroundPosition='left';
+		document.getElementsByTagName('td')[i].setAttribute('onclick', "choixjoueur(block_"+i+1+")");
+		}
+		document.getElementById('titre').innerHTML= 'Morpion';
+
+	}
+
+
+	function choixjoueur(caseCocher){
+		nombreCoup++;
+		var placeCoupJouer = parseInt(caseCocher.charAt(6))-1;
+
+			if(nombreCoup%2 === 0){
+			coupJouer[placeCoupJouer]= 'croix';
+			 document.getElementById(caseCocher).style.backgroundPosition= 'center';
+			}
+		else {
+			coupJouer[placeCoupJouer]= 'rond';
+			 document.getElementById(caseCocher).style.backgroundPosition= 'right';
+	}
+		document.getElementById(caseCocher).removeAttribute('onclick');
+		console.log(coupJouer);
+		gagnant();
+
+	}
+
+	function comparaison(zone1, zone2, zone3){
+			if (zone1 === zone2 && zone1=== zone3 && zone1!= 'rien') {
+			resultat= zone1;
+				return true;
+			}
+			else {
+				return false;
+			}
+	}
+
+
+	function gagnant(){
+		console.log(nombreCoup);
+		if (comparaison(coupJouer[0], coupJouer[1], coupJouer[2]) || comparaison(coupJouer[3], coupJouer[4], coupJouer[5]) || comparaison(coupJouer[6], coupJouer[7], coupJouer[8]) || comparaison(coupJouer[0], coupJouer[3], coupJouer[6]) || comparaison(coupJouer[1], coupJouer[4], coupJouer[7]) || comparaison(coupJouer[2], coupJouer[5], coupJouer[8]) || comparaison(coupJouer[0], coupJouer[4], coupJouer[8]) || comparaison(coupJouer[2], coupJouer[4], coupJouer[6])){
+			
+			document.getElementById('titre').innerHTML= 'les '+resultat+" sont gagnant tralalalala l'air!";
+		for (var i = 1; i < coupJouer.length; i++) {
+			document.getElementById('block_'+i).onclick= false;		}
+		}
+
+		else if(nombreCoup===10){
+			document.getElementById('titre').innerHTML= 'Egalité!';
+		}
+		document.getElementById('bouton').style.display='block';
+	}
+
+
+		</script>
+</body>
+</html>

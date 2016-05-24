@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PIERRE, FEUILLE, CISEAUX!!</title>
+
+
+	<style>
+body{
+	margin: 0px;
+	padding: 0px;
+	
+
+}
+
+.block{
+	display: inline-block;
+	width: 50%;
+	min-height: 100vh;
+
+}
+
+.droit{
+	float: right;
+	background-color: red;
+
+}
+.gauche{
+	background-color: blue;
+
+}
+
+.image{
+	margin: auto;
+	width: 50%;
+	height: 50vh;
+}
+img{
+	width: 100%;
+	height: 100%;
+}
+
+#titre {
+	position: absolute;
+	display: block;
+	margin: auto;
+	width: 100%;
+	text-align: center;
+
+}
+
+h3{
+	display: block;
+	margin: auto;
+	margin-top: 25vh;
+	width: 100%;
+	text-align: center;
+
+}
+
+#bouton{
+	position: absolute;
+	width: 100px;
+	height: 90px;
+	bottom: 0px;
+	margin-left: 46.5%;
+}
+
+
+
+	</style>
+</head>
+<body onload="initialisation();">
+
+	<h1 id="titre"> Chifoumi </h1>
+
+
+
+	<div class="block gauche">
+		<h3 id="tgauche">Titre Gauche</h3>
+		<div class="image" onclick="aleatoire_gauche();">
+			<img id="imgg" src="images-pfc/depart.jpg">
+		</div>
+
+	</div>
+
+
+	<div class="block droit">
+		<h3 id="tdroit"> Titre Droit</h3>
+		<div class="image" onclick="aleatoire_droit(); ">
+			<img id="imgd" src="images-pfc/depart.jpg">
+		</div>
+	</div>
+
+	<div>
+		<button id="bouton">Rejouer!</button>
+	</div>
+
+
+<script type="text/javascript">
+	function initialisation(){
+		document.getElementById('bouton').style.display='none';
+		tableau= ['ciseau', 'feuille', 'pierre'];
+		resultat= ['vide', 'vide'];
+	}
+
+
+
+	function aleatoire_gauche(){
+		var gauche= Math.floor(Math.random()*tableau.length);
+		var resultatg= tableau[gauche];
+		document.getElementById('imgg').src="images-pfc/"+resultatg+".jpg";
+		document.getElementsByClassName('image')[0].onclick= false;
+		resultat[0]= resultatg;
+		console.log(resultat);
+		comparer();
+	}
+
+	function aleatoire_droit(){
+		var droit= Math.floor(Math.random()*tableau.length);
+		var resultatd= tableau[droit];
+		document.getElementById('imgd').src="images-pfc/"+resultatd+".jpg";
+		document.getElementsByClassName('image')[1].onclick= false;
+		resultat[1]= resultatd;
+		console.log(resultat);
+		comparer();
+	}
+
+	function comparer(){
+		if(resultat[0] !== 'vide'&& resultat[1]!== 'vide'){
+			if(resultat[0]=== resultat[1]){
+				document.getElementById('titre').innerHTML= 'Egalité Bande de Nullos!';
+			}
+
+			else if(resultat[0]==='ciseau' && resultat[1]=== 'pierre'){
+				document.getElementById('titre').innerHTML='La pierre gagne';
+			}
+
+			else if(resultat[0]==='ciseau' && resultat[1]=== 'feuille'){
+				alert('Le ciseaux gagne');
+			}
+			else if(resultat[0]==='pierre' && resultat[1]=== 'feuille'){
+				alert('La feuille gagne');
+			}
+			else if(resultat[0]==='pierre' && resultat[1]=== 'ciseau'){
+				document.getElementById('titre').innerHTML='La pierre gagne';
+			}
+
+			else if(resultat[0]==='feuille' && resultat[1]=== 'ciseau'){
+				alert('Le ciseaux gagne');
+			}
+			else if(resultat[0]==='feuille' && resultat[1]=== 'pierre'){
+				alert('La feuille gagne');
+			}
+		}
+	}
+
+
+</script>
+
+</body>
+</html>
