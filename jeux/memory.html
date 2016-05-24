@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Memory</title>
+	
+
+	<style type="text/css">
+
+h1{
+	width: 100%;
+	text-align: center;
+	text-decoration: underline;
+}
+
+img {
+	margin: auto;
+	width: 150px;
+	height: 150px;
+	cursor: pointer;
+}
+
+tr td {
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+#bouton{
+	width: 100%;
+	clear: both;
+	margin-top: 10px;
+	text-align: center;
+}
+
+button {
+	text-align: center;
+
+}
+
+	</style>
+</head>
+
+
+
+<body>
+	<h1>MEMORY</h1>
+
+<table align="center">
+	<TBODY id=Carte>
+      <tr>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      </tr>
+      <tr>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+
+      </tr>
+      <tr>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      </tr>
+      <tr>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      	<td><img src="images/tardis.jpg"/></td>
+      </tr>
+
+    </TBODY>
+
+</table>
+		<div id='bouton'>
+<button onclick="initialise(); rejouer()"> Rejouer!</button>
+		</div>
+
+
+<script type="text/javascript">
+
+			/* Il y a 8 motis de carte, donc un tableau à 8 motifsx2 car paire => voir la fonction initialise*/
+var motifs= [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12];
+
+
+		/* pour les faces de carte: 0= face caché; 1= face visible et -1 carte enlevé car trouvé. => voir la fonction afficher */
+var face= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; /*toutes les faces sont cachés au début */
+
+
+		/*il faut un tableau qui prend l'emplacement des cartes retrounées voir plus tard la fonction controleJeu*/
+var retournees= [];
+
+
+		/* tableau avec les objets  des éléments img. récupères les élements du tabeau et ajoute un nouvel objet noCarte ainsi qu'un onclick*/
+var images= document.getElementById('Carte').getElementsByTagName('img');
+	for (var i = 0; i < images.length; i++) {
+		images[i].noCarte=i
+		images[i].onclick= function(){
+			controleJeu(this.noCarte);
+		}
+	}
+initialise();
+
+	/* Mélange les numéros de motifs des cartes*/
+	function initialise(noCarte) {
+	for (var position = motifs.length -1; position>=1; position--) {
+		aleatoire= Math.floor(Math.random()*(position+1));
+		garder= motifs[position];
+		motifs[position]=motifs[aleatoire];
+		motifs[aleatoire]= garder;
+	}
+	console.log(motifs)
+
+}	
+
+	/*détermine la position des cartes: 0= face caché; 1 face dévoilé; -1 carte caché car trouvé*/
+	function afficher(noCarte){
+		switch(face[noCarte]){
+			case 0: images[noCarte].src="images/tardis.jpg";
+			break;
+
+			case 1: images[noCarte].src="images/doctor"+motifs[noCarte]+".jpg";
+			break;
+			case -1: images[noCarte].style.visibility= "hidden";
+			break;
+		}
+
+	}
+
+		/* fonction qui détermine la valeurs des cartes et si il faut les enlevé du jeu ou les retourné*/
+	function controleJeu(noCarte){
+		/* évite que l'utilisateur retourne plus de deux carte meme s'il clique vite*/
+		if (retournees.length<2) {
+
+			/*on fait passer l'état de carte de 0 à 1; on ajoute son numéro au tableau retournée et on met à jour l'affichage sans que la carte ne se retourne tant qu'un autre carte n'est pas sélectionnée*/
+			if (face[noCarte]==0) {
+				face[noCarte]=1;
+				retournees.push(noCarte);
+				afficher(noCarte);
+			}
+
+			/* avec deux carte retournée: si elles ont le me motif => faire passé en hidden(-1). si elles n'ont pas le même potif il faut qu'elles reprennent leur emplacement 0 */
+
+			if (retournees.length == 2){
+				etat= 0;
+				if(motifs[retournees[0]] === motifs[retournees[1]]){
+					etat= -1;
+				}
+
+				face[retournees [0]]= etat;
+				face[retournees[1]]= etat;
+
+
+			/*permet de laisser l'utilisateur le temps de voir les carte et retourne les carte à la fin du temps*/
+			setTimeout(function(){
+				afficher(retournees[0]);
+				afficher(retournees[1]);
+				retournees=[];
+			},800);
+			}
+		}
+	}
+
+	function rejouer(){
+		alert('Vous allez reprendre une nouvelle partie.... ou pas!');
+		location.reload();
+	}
+
+
+</script>
+
+</body>
+</html>
